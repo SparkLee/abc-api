@@ -20,4 +20,4 @@ jobs:
       - name: Push docker image to Docker Hub
         run: |
           docker login -u sparklee -p $DOCKERHUB_PAT
-          docker push sparklee/abc:latest
+          docker push sparklee/abc-api:latest
