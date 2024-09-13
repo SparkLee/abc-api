@@ -1,0 +1,23 @@
+name: Build and Publish to Docker Hub
+
+on:
+  push:
+    branches: ["main"]
+
+env:
+  DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
+
+jobs:
+  build-and-publish-to-docker-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build docker image
+        run: docker compose build
+
+      - name: Push docker image to Docker Hub
+        run: |
+          docker login -u sparklee -p $DOCKERHUB_PAT
+          docker push sparklee/abc:latest

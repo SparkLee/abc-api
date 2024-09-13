@@ -1,0 +1,27 @@
+name: Deploy to Server
+
+on:
+  workflow_run:
+    workflows: ["Build and Publish to Docker Hub"]
+    types: [completed]
+
+jobs:
+  # ssh-deploy 依赖 rsync 进行文件同步以实现远程部署；传输的双方都必须安装 rsync，即 github ci机器和部署机器均需有rsync命令：https://www.ruanyifeng.com/blog/2020/08/rsync.html
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/marketplace/actions/ssh-deploy
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          REMOTE_HOST: ${{ secrets.SSH_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_114_132_232_154 }}
+          # 其实只需要执行命令，无需 rsync 同步待部署文件，但是 ssh-deploy 插件中没有选项可以关闭 rsync，故同步空目录即可（github action的两个job之间不会共享文件，是两个独立的runner，故此job的当前工作目录是个空目录）。
+          SOURCE: ''
+          TARGET: '/tmp/dist'
+          SCRIPT_AFTER: |
+            cd /opt/qf-miscellany/docker/sparklee/my-abc
+            docker compose -f docker-compose-api.yml up -d --pull always
+            docker image prune -f

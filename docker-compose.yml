@@ -1,0 +1,5 @@
+services:
+  abc-api:
+    image: "sparklee/abc-api:latest"
+    build:
+      context: .
