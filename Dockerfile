@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /src/bin /app
 
+# 添加默认项目文件
+COPY ./configs/config.yaml /data/conf
+
 WORKDIR /app
 
 EXPOSE 8000
