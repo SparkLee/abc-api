@@ -17,7 +17,7 @@ COPY --from=builder /src/bin /app
 
 # 添加默认项目文件
 COPY ./configs/config.yaml /data/conf/
-VOLUME /data/conf
+#VOLUME /data/conf
 
 WORKDIR /app
 
