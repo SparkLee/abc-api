@@ -3,6 +3,9 @@ package data
 import (
 	"abc/internal/conf"
 	"abc/internal/data/ent"
+	"context"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
@@ -21,8 +24,48 @@ type Data struct {
 
 // NewData .
 func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
-	cleanup := func() {
-		log.NewHelper(logger).Info("closing the data resources")
+	lg := log.NewHelper(logger)
+
+	client, err := makeEntClient(c, lg)
+	if err != nil {
+		return nil, nil, err
 	}
-	return &Data{}, cleanup, nil
+
+	err = autoMigrate(client, lg)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return &Data{
+			db: client,
+		}, func() {
+			lg.Info("closing the data resources")
+			if err := client.Close(); err != nil {
+				lg.Error(err)
+			}
+		}, nil
+}
+
+func makeEntClient(c *conf.Data, lg *log.Helper) (*ent.Client, error) {
+	drv, err := sql.Open(
+		c.Database.Driver,
+		c.Database.Source,
+	)
+	if err != nil {
+		lg.Errorf("failed opening connection to database: %v", err)
+		return nil, err
+	}
+	sqlDrv := dialect.DebugWithContext(drv, func(ctx context.Context, i ...interface{}) {
+		lg.WithContext(ctx).Info(i...)
+	})
+	client := ent.NewClient(ent.Driver(sqlDrv))
+	return client, err
+}
+
+func autoMigrate(client *ent.Client, lg *log.Helper) error {
+	if err := client.Schema.Create(context.Background()); err != nil {
+		lg.Errorf("failed creating schema resources: %v", err)
+		return err
+	}
+	return nil
 }
