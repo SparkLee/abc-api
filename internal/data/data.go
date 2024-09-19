@@ -2,9 +2,13 @@ package data
 
 import (
 	"abc/internal/conf"
+	"abc/internal/data/ent"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+
+	// init sqlite driver
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // ProviderSet is data providers.
@@ -12,7 +16,7 @@ var ProviderSet = wire.NewSet(NewData, NewGreeterRepo)
 
 // Data .
 type Data struct {
-	// TODO wrapped database client
+	db *ent.Client
 }
 
 // NewData .
