@@ -10,7 +10,11 @@ import (
 var (
 	// WordsColumns holds the columns for the "words" table.
 	WordsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "group", Type: field.TypeString},
+		{Name: "word", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// WordsTable holds the schema information for the "words" table.
 	WordsTable = &schema.Table{

@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -24,6 +25,62 @@ type WordsUpdate struct {
 // Where appends a list predicates to the WordsUpdate builder.
 func (wu *WordsUpdate) Where(ps ...predicate.Words) *WordsUpdate {
 	wu.mutation.Where(ps...)
+	return wu
+}
+
+// SetGroup sets the "group" field.
+func (wu *WordsUpdate) SetGroup(s string) *WordsUpdate {
+	wu.mutation.SetGroup(s)
+	return wu
+}
+
+// SetNillableGroup sets the "group" field if the given value is not nil.
+func (wu *WordsUpdate) SetNillableGroup(s *string) *WordsUpdate {
+	if s != nil {
+		wu.SetGroup(*s)
+	}
+	return wu
+}
+
+// SetWord sets the "word" field.
+func (wu *WordsUpdate) SetWord(s string) *WordsUpdate {
+	wu.mutation.SetWord(s)
+	return wu
+}
+
+// SetNillableWord sets the "word" field if the given value is not nil.
+func (wu *WordsUpdate) SetNillableWord(s *string) *WordsUpdate {
+	if s != nil {
+		wu.SetWord(*s)
+	}
+	return wu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (wu *WordsUpdate) SetCreatedAt(t time.Time) *WordsUpdate {
+	wu.mutation.SetCreatedAt(t)
+	return wu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (wu *WordsUpdate) SetNillableCreatedAt(t *time.Time) *WordsUpdate {
+	if t != nil {
+		wu.SetCreatedAt(*t)
+	}
+	return wu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (wu *WordsUpdate) SetUpdatedAt(t time.Time) *WordsUpdate {
+	wu.mutation.SetUpdatedAt(t)
+	return wu
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (wu *WordsUpdate) SetNillableUpdatedAt(t *time.Time) *WordsUpdate {
+	if t != nil {
+		wu.SetUpdatedAt(*t)
+	}
 	return wu
 }
 
@@ -60,13 +117,25 @@ func (wu *WordsUpdate) ExecX(ctx context.Context) {
 }
 
 func (wu *WordsUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(words.Table, words.Columns, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(words.Table, words.Columns, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt64))
 	if ps := wu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := wu.mutation.Group(); ok {
+		_spec.SetField(words.FieldGroup, field.TypeString, value)
+	}
+	if value, ok := wu.mutation.Word(); ok {
+		_spec.SetField(words.FieldWord, field.TypeString, value)
+	}
+	if value, ok := wu.mutation.CreatedAt(); ok {
+		_spec.SetField(words.FieldCreatedAt, field.TypeTime, value)
+	}
+	if value, ok := wu.mutation.UpdatedAt(); ok {
+		_spec.SetField(words.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, wu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -86,6 +155,62 @@ type WordsUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *WordsMutation
+}
+
+// SetGroup sets the "group" field.
+func (wuo *WordsUpdateOne) SetGroup(s string) *WordsUpdateOne {
+	wuo.mutation.SetGroup(s)
+	return wuo
+}
+
+// SetNillableGroup sets the "group" field if the given value is not nil.
+func (wuo *WordsUpdateOne) SetNillableGroup(s *string) *WordsUpdateOne {
+	if s != nil {
+		wuo.SetGroup(*s)
+	}
+	return wuo
+}
+
+// SetWord sets the "word" field.
+func (wuo *WordsUpdateOne) SetWord(s string) *WordsUpdateOne {
+	wuo.mutation.SetWord(s)
+	return wuo
+}
+
+// SetNillableWord sets the "word" field if the given value is not nil.
+func (wuo *WordsUpdateOne) SetNillableWord(s *string) *WordsUpdateOne {
+	if s != nil {
+		wuo.SetWord(*s)
+	}
+	return wuo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (wuo *WordsUpdateOne) SetCreatedAt(t time.Time) *WordsUpdateOne {
+	wuo.mutation.SetCreatedAt(t)
+	return wuo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (wuo *WordsUpdateOne) SetNillableCreatedAt(t *time.Time) *WordsUpdateOne {
+	if t != nil {
+		wuo.SetCreatedAt(*t)
+	}
+	return wuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (wuo *WordsUpdateOne) SetUpdatedAt(t time.Time) *WordsUpdateOne {
+	wuo.mutation.SetUpdatedAt(t)
+	return wuo
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (wuo *WordsUpdateOne) SetNillableUpdatedAt(t *time.Time) *WordsUpdateOne {
+	if t != nil {
+		wuo.SetUpdatedAt(*t)
+	}
+	return wuo
 }
 
 // Mutation returns the WordsMutation object of the builder.
@@ -134,7 +259,7 @@ func (wuo *WordsUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (wuo *WordsUpdateOne) sqlSave(ctx context.Context) (_node *Words, err error) {
-	_spec := sqlgraph.NewUpdateSpec(words.Table, words.Columns, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(words.Table, words.Columns, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt64))
 	id, ok := wuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Words.id" for update`)}
@@ -158,6 +283,18 @@ func (wuo *WordsUpdateOne) sqlSave(ctx context.Context) (_node *Words, err error
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := wuo.mutation.Group(); ok {
+		_spec.SetField(words.FieldGroup, field.TypeString, value)
+	}
+	if value, ok := wuo.mutation.Word(); ok {
+		_spec.SetField(words.FieldWord, field.TypeString, value)
+	}
+	if value, ok := wuo.mutation.CreatedAt(); ok {
+		_spec.SetField(words.FieldCreatedAt, field.TypeTime, value)
+	}
+	if value, ok := wuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(words.FieldUpdatedAt, field.TypeTime, value)
 	}
 	_node = &Words{config: wuo.config}
 	_spec.Assign = _node.assignValues

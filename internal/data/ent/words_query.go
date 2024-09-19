@@ -82,8 +82,8 @@ func (wq *WordsQuery) FirstX(ctx context.Context) *Words {
 
 // FirstID returns the first Words ID from the query.
 // Returns a *NotFoundError when no Words ID was found.
-func (wq *WordsQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (wq *WordsQuery) FirstID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = wq.Limit(1).IDs(setContextOp(ctx, wq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -95,7 +95,7 @@ func (wq *WordsQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (wq *WordsQuery) FirstIDX(ctx context.Context) int {
+func (wq *WordsQuery) FirstIDX(ctx context.Context) int64 {
 	id, err := wq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -133,8 +133,8 @@ func (wq *WordsQuery) OnlyX(ctx context.Context) *Words {
 // OnlyID is like Only, but returns the only Words ID in the query.
 // Returns a *NotSingularError when more than one Words ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (wq *WordsQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (wq *WordsQuery) OnlyID(ctx context.Context) (id int64, err error) {
+	var ids []int64
 	if ids, err = wq.Limit(2).IDs(setContextOp(ctx, wq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -150,7 +150,7 @@ func (wq *WordsQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (wq *WordsQuery) OnlyIDX(ctx context.Context) int {
+func (wq *WordsQuery) OnlyIDX(ctx context.Context) int64 {
 	id, err := wq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,7 +178,7 @@ func (wq *WordsQuery) AllX(ctx context.Context) []*Words {
 }
 
 // IDs executes the query and returns a list of Words IDs.
-func (wq *WordsQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (wq *WordsQuery) IDs(ctx context.Context) (ids []int64, err error) {
 	if wq.ctx.Unique == nil && wq.path != nil {
 		wq.Unique(true)
 	}
@@ -190,7 +190,7 @@ func (wq *WordsQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (wq *WordsQuery) IDsX(ctx context.Context) []int {
+func (wq *WordsQuery) IDsX(ctx context.Context) []int64 {
 	ids, err := wq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -258,6 +258,18 @@ func (wq *WordsQuery) Clone() *WordsQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Group string `json:"group,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Words.Query().
+//		GroupBy(words.FieldGroup).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (wq *WordsQuery) GroupBy(field string, fields ...string) *WordsGroupBy {
 	wq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &WordsGroupBy{build: wq}
@@ -269,6 +281,16 @@ func (wq *WordsQuery) GroupBy(field string, fields ...string) *WordsGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Group string `json:"group,omitempty"`
+//	}
+//
+//	client.Words.Query().
+//		Select(words.FieldGroup).
+//		Scan(ctx, &v)
 func (wq *WordsQuery) Select(fields ...string) *WordsSelect {
 	wq.ctx.Fields = append(wq.ctx.Fields, fields...)
 	sbuild := &WordsSelect{WordsQuery: wq}
@@ -343,7 +365,7 @@ func (wq *WordsQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (wq *WordsQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(words.Table, words.Columns, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(words.Table, words.Columns, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt64))
 	_spec.From = wq.sql
 	if unique := wq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

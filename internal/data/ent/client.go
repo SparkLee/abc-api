@@ -258,7 +258,7 @@ func (c *WordsClient) UpdateOne(w *Words) *WordsUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *WordsClient) UpdateOneID(id int) *WordsUpdateOne {
+func (c *WordsClient) UpdateOneID(id int64) *WordsUpdateOne {
 	mutation := newWordsMutation(c.config, OpUpdateOne, withWordsID(id))
 	return &WordsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -275,7 +275,7 @@ func (c *WordsClient) DeleteOne(w *Words) *WordsDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *WordsClient) DeleteOneID(id int) *WordsDeleteOne {
+func (c *WordsClient) DeleteOneID(id int64) *WordsDeleteOne {
 	builder := c.Delete().Where(words.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -292,12 +292,12 @@ func (c *WordsClient) Query() *WordsQuery {
 }
 
 // Get returns a Words entity by its id.
-func (c *WordsClient) Get(ctx context.Context, id int) (*Words, error) {
+func (c *WordsClient) Get(ctx context.Context, id int64) (*Words, error) {
 	return c.Query().Where(words.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *WordsClient) GetX(ctx context.Context, id int) *Words {
+func (c *WordsClient) GetX(ctx context.Context, id int64) *Words {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

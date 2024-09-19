@@ -6,6 +6,7 @@ import (
 	"abc/internal/data/ent/words"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -13,9 +14,17 @@ import (
 
 // Words is the model entity for the Words schema.
 type Words struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
+	// Group holds the value of the "group" field.
+	Group string `json:"group,omitempty"`
+	// Word holds the value of the "word" field.
+	Word string `json:"word,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -26,6 +35,10 @@ func (*Words) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case words.FieldID:
 			values[i] = new(sql.NullInt64)
+		case words.FieldGroup, words.FieldWord:
+			values[i] = new(sql.NullString)
+		case words.FieldCreatedAt, words.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -46,7 +59,31 @@ func (w *Words) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			w.ID = int(value.Int64)
+			w.ID = int64(value.Int64)
+		case words.FieldGroup:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field group", values[i])
+			} else if value.Valid {
+				w.Group = value.String
+			}
+		case words.FieldWord:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field word", values[i])
+			} else if value.Valid {
+				w.Word = value.String
+			}
+		case words.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				w.CreatedAt = value.Time
+			}
+		case words.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				w.UpdatedAt = value.Time
+			}
 		default:
 			w.selectValues.Set(columns[i], values[i])
 		}
@@ -82,7 +119,18 @@ func (w *Words) Unwrap() *Words {
 func (w *Words) String() string {
 	var builder strings.Builder
 	builder.WriteString("Words(")
-	builder.WriteString(fmt.Sprintf("id=%v", w.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", w.ID))
+	builder.WriteString("group=")
+	builder.WriteString(w.Group)
+	builder.WriteString(", ")
+	builder.WriteString("word=")
+	builder.WriteString(w.Word)
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(w.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(w.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

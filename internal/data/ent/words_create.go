@@ -5,7 +5,9 @@ package ent
 import (
 	"abc/internal/data/ent/words"
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +20,52 @@ type WordsCreate struct {
 	hooks    []Hook
 }
 
+// SetGroup sets the "group" field.
+func (wc *WordsCreate) SetGroup(s string) *WordsCreate {
+	wc.mutation.SetGroup(s)
+	return wc
+}
+
+// SetWord sets the "word" field.
+func (wc *WordsCreate) SetWord(s string) *WordsCreate {
+	wc.mutation.SetWord(s)
+	return wc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (wc *WordsCreate) SetCreatedAt(t time.Time) *WordsCreate {
+	wc.mutation.SetCreatedAt(t)
+	return wc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (wc *WordsCreate) SetNillableCreatedAt(t *time.Time) *WordsCreate {
+	if t != nil {
+		wc.SetCreatedAt(*t)
+	}
+	return wc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (wc *WordsCreate) SetUpdatedAt(t time.Time) *WordsCreate {
+	wc.mutation.SetUpdatedAt(t)
+	return wc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (wc *WordsCreate) SetNillableUpdatedAt(t *time.Time) *WordsCreate {
+	if t != nil {
+		wc.SetUpdatedAt(*t)
+	}
+	return wc
+}
+
+// SetID sets the "id" field.
+func (wc *WordsCreate) SetID(i int64) *WordsCreate {
+	wc.mutation.SetID(i)
+	return wc
+}
+
 // Mutation returns the WordsMutation object of the builder.
 func (wc *WordsCreate) Mutation() *WordsMutation {
 	return wc.mutation
@@ -25,6 +73,7 @@ func (wc *WordsCreate) Mutation() *WordsMutation {
 
 // Save creates the Words in the database.
 func (wc *WordsCreate) Save(ctx context.Context) (*Words, error) {
+	wc.defaults()
 	return withHooks(ctx, wc.sqlSave, wc.mutation, wc.hooks)
 }
 
@@ -50,8 +99,32 @@ func (wc *WordsCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (wc *WordsCreate) defaults() {
+	if _, ok := wc.mutation.CreatedAt(); !ok {
+		v := words.DefaultCreatedAt
+		wc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := wc.mutation.UpdatedAt(); !ok {
+		v := words.DefaultUpdatedAt
+		wc.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (wc *WordsCreate) check() error {
+	if _, ok := wc.mutation.Group(); !ok {
+		return &ValidationError{Name: "group", err: errors.New(`ent: missing required field "Words.group"`)}
+	}
+	if _, ok := wc.mutation.Word(); !ok {
+		return &ValidationError{Name: "word", err: errors.New(`ent: missing required field "Words.word"`)}
+	}
+	if _, ok := wc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Words.created_at"`)}
+	}
+	if _, ok := wc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Words.updated_at"`)}
+	}
 	return nil
 }
 
@@ -66,8 +139,10 @@ func (wc *WordsCreate) sqlSave(ctx context.Context) (*Words, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
 	wc.mutation.id = &_node.ID
 	wc.mutation.done = true
 	return _node, nil
@@ -76,8 +151,28 @@ func (wc *WordsCreate) sqlSave(ctx context.Context) (*Words, error) {
 func (wc *WordsCreate) createSpec() (*Words, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Words{config: wc.config}
-		_spec = sqlgraph.NewCreateSpec(words.Table, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(words.Table, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt64))
 	)
+	if id, ok := wc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := wc.mutation.Group(); ok {
+		_spec.SetField(words.FieldGroup, field.TypeString, value)
+		_node.Group = value
+	}
+	if value, ok := wc.mutation.Word(); ok {
+		_spec.SetField(words.FieldWord, field.TypeString, value)
+		_node.Word = value
+	}
+	if value, ok := wc.mutation.CreatedAt(); ok {
+		_spec.SetField(words.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := wc.mutation.UpdatedAt(); ok {
+		_spec.SetField(words.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	return _node, _spec
 }
 
@@ -99,6 +194,7 @@ func (wcb *WordsCreateBulk) Save(ctx context.Context) ([]*Words, error) {
 	for i := range wcb.builders {
 		func(i int, root context.Context) {
 			builder := wcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*WordsMutation)
 				if !ok {
@@ -125,9 +221,9 @@ func (wcb *WordsCreateBulk) Save(ctx context.Context) ([]*Words, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = int64(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

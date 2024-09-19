@@ -4,10 +4,12 @@ package ent
 
 import (
 	"abc/internal/data/ent/predicate"
+	"abc/internal/data/ent/words"
 	"context"
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -30,7 +32,11 @@ type WordsMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *int64
+	group         *string
+	word          *string
+	created_at    *time.Time
+	updated_at    *time.Time
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Words, error)
@@ -57,7 +63,7 @@ func newWordsMutation(c config, op Op, opts ...wordsOption) *WordsMutation {
 }
 
 // withWordsID sets the ID field of the mutation.
-func withWordsID(id int) wordsOption {
+func withWordsID(id int64) wordsOption {
 	return func(m *WordsMutation) {
 		var (
 			err   error
@@ -107,9 +113,15 @@ func (m WordsMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Words entities.
+func (m *WordsMutation) SetID(id int64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *WordsMutation) ID() (id int, exists bool) {
+func (m *WordsMutation) ID() (id int64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -120,12 +132,12 @@ func (m *WordsMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *WordsMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *WordsMutation) IDs(ctx context.Context) ([]int64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []int64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -133,6 +145,150 @@ func (m *WordsMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetGroup sets the "group" field.
+func (m *WordsMutation) SetGroup(s string) {
+	m.group = &s
+}
+
+// Group returns the value of the "group" field in the mutation.
+func (m *WordsMutation) Group() (r string, exists bool) {
+	v := m.group
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGroup returns the old "group" field's value of the Words entity.
+// If the Words object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WordsMutation) OldGroup(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGroup is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGroup requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGroup: %w", err)
+	}
+	return oldValue.Group, nil
+}
+
+// ResetGroup resets all changes to the "group" field.
+func (m *WordsMutation) ResetGroup() {
+	m.group = nil
+}
+
+// SetWord sets the "word" field.
+func (m *WordsMutation) SetWord(s string) {
+	m.word = &s
+}
+
+// Word returns the value of the "word" field in the mutation.
+func (m *WordsMutation) Word() (r string, exists bool) {
+	v := m.word
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWord returns the old "word" field's value of the Words entity.
+// If the Words object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WordsMutation) OldWord(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWord is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWord requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWord: %w", err)
+	}
+	return oldValue.Word, nil
+}
+
+// ResetWord resets all changes to the "word" field.
+func (m *WordsMutation) ResetWord() {
+	m.word = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *WordsMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *WordsMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Words entity.
+// If the Words object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WordsMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *WordsMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *WordsMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *WordsMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Words entity.
+// If the Words object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WordsMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *WordsMutation) ResetUpdatedAt() {
+	m.updated_at = nil
 }
 
 // Where appends a list predicates to the WordsMutation builder.
@@ -169,7 +325,19 @@ func (m *WordsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *WordsMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+	fields := make([]string, 0, 4)
+	if m.group != nil {
+		fields = append(fields, words.FieldGroup)
+	}
+	if m.word != nil {
+		fields = append(fields, words.FieldWord)
+	}
+	if m.created_at != nil {
+		fields = append(fields, words.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, words.FieldUpdatedAt)
+	}
 	return fields
 }
 
@@ -177,6 +345,16 @@ func (m *WordsMutation) Fields() []string {
 // return value indicates that this field was not set, or was not defined in the
 // schema.
 func (m *WordsMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case words.FieldGroup:
+		return m.Group()
+	case words.FieldWord:
+		return m.Word()
+	case words.FieldCreatedAt:
+		return m.CreatedAt()
+	case words.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
 	return nil, false
 }
 
@@ -184,6 +362,16 @@ func (m *WordsMutation) Field(name string) (ent.Value, bool) {
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
 func (m *WordsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case words.FieldGroup:
+		return m.OldGroup(ctx)
+	case words.FieldWord:
+		return m.OldWord(ctx)
+	case words.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case words.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
 	return nil, fmt.Errorf("unknown Words field %s", name)
 }
 
@@ -192,6 +380,34 @@ func (m *WordsMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *WordsMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case words.FieldGroup:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGroup(v)
+		return nil
+	case words.FieldWord:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWord(v)
+		return nil
+	case words.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case words.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Words field %s", name)
 }
@@ -213,6 +429,8 @@ func (m *WordsMutation) AddedField(name string) (ent.Value, bool) {
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
 func (m *WordsMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown Words numeric field %s", name)
 }
 
@@ -238,6 +456,20 @@ func (m *WordsMutation) ClearField(name string) error {
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *WordsMutation) ResetField(name string) error {
+	switch name {
+	case words.FieldGroup:
+		m.ResetGroup()
+		return nil
+	case words.FieldWord:
+		m.ResetWord()
+		return nil
+	case words.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case words.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
 	return fmt.Errorf("unknown Words field %s", name)
 }
 

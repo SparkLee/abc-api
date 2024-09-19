@@ -40,7 +40,7 @@ func (wd *WordsDelete) ExecX(ctx context.Context) int {
 }
 
 func (wd *WordsDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(words.Table, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(words.Table, sqlgraph.NewFieldSpec(words.FieldID, field.TypeInt64))
 	if ps := wd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
