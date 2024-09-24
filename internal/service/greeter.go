@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	v1 "abc/api/helloworld/v1"
-	"abc/internal/biz"
+	v1 "github.com/sparklee/abc-api/api/helloworld/v1"
+	"github.com/sparklee/abc-api/internal/biz"
 )
 
 // GreeterService is a greeter service.

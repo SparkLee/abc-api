@@ -3,8 +3,6 @@
 package ent
 
 import (
-	"abc/internal/data/ent/predicate"
-	"abc/internal/data/ent/words"
 	"context"
 	"fmt"
 	"math"
@@ -13,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/sparklee/abc-api/internal/data/ent/predicate"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 // WordsQuery is the builder for querying Words entities.

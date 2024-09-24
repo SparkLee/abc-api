@@ -3,7 +3,7 @@ package data
 import (
 	"context"
 
-	"abc/internal/biz"
+	"github.com/sparklee/abc-api/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
 )

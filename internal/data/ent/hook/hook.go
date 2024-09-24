@@ -3,9 +3,10 @@
 package hook
 
 import (
-	"abc/internal/data/ent"
 	"context"
 	"fmt"
+
+	"github.com/sparklee/abc-api/internal/data/ent"
 )
 
 // The WordsFunc type is an adapter to allow the use of ordinary

@@ -1,4 +1,4 @@
-module abc
+module github.com/sparklee/abc-api
 
 go 1.23.1
 

@@ -3,13 +3,13 @@
 package ent
 
 import (
-	"abc/internal/data/ent/predicate"
-	"abc/internal/data/ent/words"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/sparklee/abc-api/internal/data/ent/predicate"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 // WordsDelete is the builder for deleting a Words entity.

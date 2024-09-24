@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"abc/internal/data/ent/words"
 	"context"
 	"errors"
 	"fmt"
@@ -11,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 // WordsCreate is the builder for creating a Words entity.

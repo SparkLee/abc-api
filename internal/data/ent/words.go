@@ -3,13 +3,13 @@
 package ent
 
 import (
-	"abc/internal/data/ent/words"
 	"fmt"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 // Words is the model entity for the Words schema.

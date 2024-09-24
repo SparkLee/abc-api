@@ -1,11 +1,11 @@
 package data
 
 import (
-	"abc/internal/conf"
-	"abc/internal/data/ent"
 	"context"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"github.com/sparklee/abc-api/internal/conf"
+	"github.com/sparklee/abc-api/internal/data/ent"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"

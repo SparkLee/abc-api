@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"abc/internal/conf"
+	"github.com/sparklee/abc-api/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"

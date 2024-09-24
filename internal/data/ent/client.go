@@ -9,13 +9,12 @@ import (
 	"log"
 	"reflect"
 
-	"abc/internal/data/ent/migrate"
-
-	"abc/internal/data/ent/words"
+	"github.com/sparklee/abc-api/internal/data/ent/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 // Client is the client that holds all ent builders.

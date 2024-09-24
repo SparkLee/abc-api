@@ -5,13 +5,12 @@ package enttest
 import (
 	"context"
 
-	"abc/internal/data/ent"
+	"github.com/sparklee/abc-api/internal/data/ent"
 	// required by schema hooks.
-	_ "abc/internal/data/ent/runtime"
-
-	"abc/internal/data/ent/migrate"
+	_ "github.com/sparklee/abc-api/internal/data/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
+	"github.com/sparklee/abc-api/internal/data/ent/migrate"
 )
 
 type (

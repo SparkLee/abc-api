@@ -3,8 +3,6 @@
 package ent
 
 import (
-	"abc/internal/data/ent/predicate"
-	"abc/internal/data/ent/words"
 	"context"
 	"errors"
 	"fmt"
@@ -13,6 +11,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/sparklee/abc-api/internal/data/ent/predicate"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 const (

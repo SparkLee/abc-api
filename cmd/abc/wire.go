@@ -6,11 +6,11 @@
 package main
 
 import (
-	"abc/internal/biz"
-	"abc/internal/conf"
-	"abc/internal/data"
-	"abc/internal/server"
-	"abc/internal/service"
+	"github.com/sparklee/abc-api/internal/biz"
+	"github.com/sparklee/abc-api/internal/conf"
+	"github.com/sparklee/abc-api/internal/data"
+	"github.com/sparklee/abc-api/internal/server"
+	"github.com/sparklee/abc-api/internal/service"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"

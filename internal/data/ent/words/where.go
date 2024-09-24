@@ -3,10 +3,10 @@
 package words
 
 import (
-	"abc/internal/data/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/sparklee/abc-api/internal/data/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

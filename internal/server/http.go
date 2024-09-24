@@ -1,9 +1,9 @@
 package server
 
 import (
-	v1 "abc/api/helloworld/v1"
-	"abc/internal/conf"
-	"abc/internal/service"
+	v1 "github.com/sparklee/abc-api/api/helloworld/v1"
+	"github.com/sparklee/abc-api/internal/conf"
+	"github.com/sparklee/abc-api/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"

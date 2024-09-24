@@ -3,9 +3,10 @@
 package ent
 
 import (
-	"abc/internal/data/ent/schema"
-	"abc/internal/data/ent/words"
 	"time"
+
+	"github.com/sparklee/abc-api/internal/data/ent/schema"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 // The init function reads all schema descriptors with runtime code

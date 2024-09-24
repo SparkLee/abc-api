@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"abc/internal/data/ent/words"
 	"context"
 	"errors"
 	"fmt"
@@ -13,6 +12,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 // ent aliases to avoid import conflicts in user's code.
