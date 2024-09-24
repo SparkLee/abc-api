@@ -43,7 +43,7 @@ message Word {
 }
 
 message CreateWordRequest {
-  string word = 1 [(validate.rules).string = {min_len: 10}];
+  string word = 1 [(validate.rules).string = {min_len: 1}];
 }
 message CreateWordReply {
   Word word = 1;

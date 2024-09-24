@@ -1,6 +1,8 @@
 package server
 
 import (
+	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	v1 "github.com/sparklee/abc-api/api/abc/v1"
 	v2 "github.com/sparklee/abc-api/api/helloworld/v1"
 	"github.com/sparklee/abc-api/internal/conf"
@@ -16,6 +18,8 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, wordService 
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			logging.Server(logger),
+			validate.Validator(),
 		),
 	}
 	if c.Http.Network != "" {
