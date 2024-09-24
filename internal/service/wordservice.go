@@ -12,11 +12,14 @@ type WordService struct {
 	log *log.Helper
 }
 
-func NewWordService() *WordService {
-	return &WordService{}
+func NewWordService(logger log.Logger) *WordService {
+	return &WordService{
+		log: log.NewHelper(logger),
+	}
 }
 
 func (s *WordService) CreateWord(ctx context.Context, req *pb.CreateWordRequest) (*pb.CreateWordReply, error) {
+	s.log.Infof("input data %v", req)
 	return &pb.CreateWordReply{}, nil
 }
 func (s *WordService) UpdateWord(ctx context.Context, req *pb.UpdateWordRequest) (*pb.UpdateWordReply, error) {
