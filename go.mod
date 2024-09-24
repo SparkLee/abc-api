@@ -4,6 +4,7 @@ go 1.23.1
 
 require (
 	entgo.io/ent v0.14.1
+	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/v2 v2.8.0
 	github.com/google/wire v0.6.0
 	github.com/mattn/go-sqlite3 v1.14.16

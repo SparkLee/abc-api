@@ -59,9 +59,9 @@ generate:
 .PHONY: all
 # generate all
 all:
-	make api;
-	make config;
-	make generate;
+	make api
+	make config
+	make generate
 
 # show help
 help:

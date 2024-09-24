@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package api.abc.v1;
+
+option go_package = "github.com/sparklee/abc-api/api/abc/v1;v1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service WordService {
+  rpc CreateWord (CreateWordRequest) returns (CreateWordReply){
+    option (google.api.http) = {
+      post:"/v1/words"
+      body: "*"
+    };
+  };
+  rpc UpdateWord (UpdateWordRequest) returns (UpdateWordReply){
+    option (google.api.http) = {
+      put: "/v1/words/{id}"
+      body:"*"
+    };
+  };
+  rpc DeleteWord (DeleteWordRequest) returns (DeleteWordReply){
+    option (google.api.http) = {
+      delete:"/v1/words/{id}"
+    };
+  };
+  rpc GetWord (GetWordRequest) returns (GetWordReply){
+    option(google.api.http) = {
+      get: "/v1/words/{id}"
+    };
+  };
+  rpc ListWord (ListWordRequest) returns (ListWordReply){
+    option(google.api.http) = {
+      get: "/v1/words"
+    };
+  };
+}
+
+message Word {
+  int64 id = 1;
+  string word = 2;
+}
+
+message CreateWordRequest {
+  string word = 1;
+}
+message CreateWordReply {
+  Word word = 1;
+}
+
+message UpdateWordRequest {
+  int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+  string word = 2;
+}
+message UpdateWordReply {
+  Word word = 1;
+}
+
+message DeleteWordRequest {
+  int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+message DeleteWordReply {}
+
+message GetWordRequest {
+  int64 id = 1;
+}
+message GetWordReply {
+  Word word = 1;
+}
+
+message ListWordRequest {}
+message ListWordReply {
+  repeated Word words = 1;
+}

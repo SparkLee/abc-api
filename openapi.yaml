@@ -3,8 +3,7 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: ""
     version: 0.0.1
 paths:
     /helloworld/{name}:
@@ -26,8 +25,139 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /v1/words:
+        get:
+            tags:
+                - WordService
+            operationId: WordService_ListWord
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.abc.v1.ListWordReply'
+        post:
+            tags:
+                - WordService
+            operationId: WordService_CreateWord
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.abc.v1.CreateWordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.abc.v1.CreateWordReply'
+    /v1/words/{id}:
+        get:
+            tags:
+                - WordService
+            operationId: WordService_GetWord
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.abc.v1.GetWordReply'
+        put:
+            tags:
+                - WordService
+            operationId: WordService_UpdateWord
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.abc.v1.UpdateWordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.abc.v1.UpdateWordReply'
+        delete:
+            tags:
+                - WordService
+            operationId: WordService_DeleteWord
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.abc.v1.DeleteWordReply'
 components:
     schemas:
+        api.abc.v1.CreateWordReply:
+            type: object
+            properties:
+                word:
+                    $ref: '#/components/schemas/api.abc.v1.Word'
+        api.abc.v1.CreateWordRequest:
+            type: object
+            properties:
+                word:
+                    type: string
+        api.abc.v1.DeleteWordReply:
+            type: object
+            properties: {}
+        api.abc.v1.GetWordReply:
+            type: object
+            properties:
+                word:
+                    $ref: '#/components/schemas/api.abc.v1.Word'
+        api.abc.v1.ListWordReply:
+            type: object
+            properties:
+                words:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.abc.v1.Word'
+        api.abc.v1.UpdateWordReply:
+            type: object
+            properties:
+                word:
+                    $ref: '#/components/schemas/api.abc.v1.Word'
+        api.abc.v1.UpdateWordRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                word:
+                    type: string
+        api.abc.v1.Word:
+            type: object
+            properties:
+                id:
+                    type: string
+                word:
+                    type: string
         helloworld.v1.HelloReply:
             type: object
             properties:
@@ -36,3 +166,5 @@ components:
             description: The response message containing the greetings
 tags:
     - name: Greeter
+      description: The greeting service definition.
+    - name: WordService
