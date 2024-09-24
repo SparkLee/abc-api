@@ -1,7 +1,8 @@
 package server
 
 import (
-	v1 "github.com/sparklee/abc-api/api/helloworld/v1"
+	v1 "github.com/sparklee/abc-api/api/abc/v1"
+	v2 "github.com/sparklee/abc-api/api/helloworld/v1"
 	"github.com/sparklee/abc-api/internal/conf"
 	"github.com/sparklee/abc-api/internal/service"
 
@@ -11,7 +12,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, wordService *service.WordService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -27,6 +28,7 @@ func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(opts...)
-	v1.RegisterGreeterServer(srv, greeter)
+	v1.RegisterWordServiceServer(srv, wordService)
+	v2.RegisterGreeterServer(srv, greeter)
 	return srv
 }

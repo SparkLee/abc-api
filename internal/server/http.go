@@ -1,7 +1,8 @@
 package server
 
 import (
-	v1 "github.com/sparklee/abc-api/api/helloworld/v1"
+	v1 "github.com/sparklee/abc-api/api/abc/v1"
+	v2 "github.com/sparklee/abc-api/api/helloworld/v1"
 	"github.com/sparklee/abc-api/internal/conf"
 	"github.com/sparklee/abc-api/internal/service"
 
@@ -11,7 +12,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, wordService *service.WordService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -27,6 +28,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterGreeterHTTPServer(srv, greeter)
+	v1.RegisterWordServiceHTTPServer(srv, wordService)
+	v2.RegisterGreeterHTTPServer(srv, greeter)
 	return srv
 }
