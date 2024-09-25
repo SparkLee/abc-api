@@ -58,7 +58,7 @@ func (m *Word) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Word
+	// no validation rules for Text
 
 	if len(errors) > 0 {
 		return WordMultiError(errors)
@@ -159,9 +159,9 @@ func (m *CreateWordRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetWord()) < 1 {
+	if utf8.RuneCountInString(m.GetText()) < 1 {
 		err := CreateWordRequestValidationError{
-			field:  "Word",
+			field:  "Text",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -412,7 +412,7 @@ func (m *UpdateWordRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for Word
+	// no validation rules for Text
 
 	if len(errors) > 0 {
 		return UpdateWordRequestMultiError(errors)

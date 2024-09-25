@@ -122,7 +122,7 @@ components:
         api.abc.v1.CreateWordRequest:
             type: object
             properties:
-                word:
+                text:
                     type: string
         api.abc.v1.DeleteWordReply:
             type: object
@@ -149,14 +149,14 @@ components:
             properties:
                 id:
                     type: string
-                word:
+                text:
                     type: string
         api.abc.v1.Word:
             type: object
             properties:
                 id:
                     type: string
-                word:
+                text:
                     type: string
         helloworld.v1.HelloReply:
             type: object
