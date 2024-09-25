@@ -30,6 +30,11 @@ paths:
             tags:
                 - WordService
             operationId: WordService_ListWord
+            parameters:
+                - name: group
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK

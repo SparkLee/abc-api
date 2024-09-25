@@ -48,5 +48,17 @@ func (s *WordService) GetWord(ctx context.Context, req *pb.GetWordRequest) (*pb.
 }
 
 func (s *WordService) ListWord(ctx context.Context, req *pb.ListWordRequest) (*pb.ListWordReply, error) {
-	return &pb.ListWordReply{}, nil
+	words, err := s.uc.ListWords(ctx, req.Group)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*pb.Word, 0)
+	for _, word := range words {
+		result = append(result, &pb.Word{
+			Text: word.Text,
+		})
+	}
+	return &pb.ListWordReply{
+		Words: result,
+	}, nil
 }

@@ -11,6 +11,7 @@ type Word struct {
 
 type WordRepo interface {
 	Save(ctx context.Context, word *Word) (*Word, error)
+	List(ctx context.Context, group string) ([]*Word, error)
 }
 
 type WordUsecase struct {
@@ -25,4 +26,8 @@ func NewWordUseCase(repo WordRepo, logger log.Logger) *WordUsecase {
 func (uc *WordUsecase) CreateWord(ctx context.Context, word *Word) (*Word, error) {
 	uc.log.WithContext(ctx).Infof("CreateWord: %v", word)
 	return uc.repo.Save(ctx, word)
+}
+
+func (uc *WordUsecase) ListWords(ctx context.Context, group string) ([]*Word, error) {
+	return uc.repo.List(ctx, group)
 }

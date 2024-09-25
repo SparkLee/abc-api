@@ -29,3 +29,17 @@ func (r *wordRepo) Save(ctx context.Context, word *biz.Word) (*biz.Word, error) 
 	}
 	return word, nil
 }
+
+func (r *wordRepo) List(ctx context.Context, group string) ([]*biz.Word, error) {
+	words, err := r.data.db.Words.Query().All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*biz.Word, 0)
+	for _, word := range words {
+		result = append(result, &biz.Word{
+			Text: word.Word,
+		})
+	}
+	return result, nil
+}

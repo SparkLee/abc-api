@@ -69,7 +69,9 @@ message GetWordReply {
   Word word = 1;
 }
 
-message ListWordRequest {}
+message ListWordRequest {
+  string group = 1;
+}
 message ListWordReply {
   repeated Word words = 1;
 }

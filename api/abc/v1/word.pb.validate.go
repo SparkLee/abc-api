@@ -1088,6 +1088,8 @@ func (m *ListWordRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Group
+
 	if len(errors) > 0 {
 		return ListWordRequestMultiError(errors)
 	}
