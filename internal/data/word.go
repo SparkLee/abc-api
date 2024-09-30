@@ -38,8 +38,14 @@ func (r *wordRepo) List(ctx context.Context, group string) ([]*biz.Word, error) 
 	result := make([]*biz.Word, 0)
 	for _, word := range words {
 		result = append(result, &biz.Word{
-			Text: word.Word,
+			Id:    word.ID,
+			Group: word.Group,
+			Text:  word.Word,
 		})
 	}
 	return result, nil
+}
+
+func (r *wordRepo) Delete(ctx context.Context, id int64) error {
+	return r.data.db.Words.DeleteOneID(id).Exec(ctx)
 }

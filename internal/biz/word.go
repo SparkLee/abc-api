@@ -6,12 +6,15 @@ import (
 )
 
 type Word struct {
-	Text string
+	Id    int64
+	Group string
+	Text  string
 }
 
 type WordRepo interface {
 	Save(ctx context.Context, word *Word) (*Word, error)
 	List(ctx context.Context, group string) ([]*Word, error)
+	Delete(ctx context.Context, id int64) error
 }
 
 type WordUsecase struct {
@@ -30,4 +33,8 @@ func (uc *WordUsecase) CreateWord(ctx context.Context, word *Word) (*Word, error
 
 func (uc *WordUsecase) ListWords(ctx context.Context, group string) ([]*Word, error) {
 	return uc.repo.List(ctx, group)
+}
+
+func (uc *WordUsecase) DeleteWord(ctx context.Context, id int64) error {
+	return uc.repo.Delete(ctx, id)
 }

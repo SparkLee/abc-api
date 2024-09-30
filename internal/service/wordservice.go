@@ -40,7 +40,7 @@ func (s *WordService) UpdateWord(ctx context.Context, req *pb.UpdateWordRequest)
 }
 
 func (s *WordService) DeleteWord(ctx context.Context, req *pb.DeleteWordRequest) (*pb.DeleteWordReply, error) {
-	return &pb.DeleteWordReply{}, nil
+	return &pb.DeleteWordReply{}, s.uc.DeleteWord(ctx, req.Id)
 }
 
 func (s *WordService) GetWord(ctx context.Context, req *pb.GetWordRequest) (*pb.GetWordReply, error) {
@@ -55,6 +55,7 @@ func (s *WordService) ListWord(ctx context.Context, req *pb.ListWordRequest) (*p
 	result := make([]*pb.Word, 0)
 	for _, word := range words {
 		result = append(result, &pb.Word{
+			Id:   word.Id,
 			Text: word.Text,
 		})
 	}
