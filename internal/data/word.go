@@ -19,7 +19,7 @@ func NewWordRepo(data *Data, logger log.Logger) biz.WordRepo {
 }
 
 func (r *wordRepo) Save(ctx context.Context, word *biz.Word) (*biz.Word, error) {
-	_, err := r.data.db.Words.
+	w, err := r.data.db.Words.
 		Create().
 		SetWord(word.Text).
 		SetGroup("foo").
@@ -27,6 +27,7 @@ func (r *wordRepo) Save(ctx context.Context, word *biz.Word) (*biz.Word, error) 
 	if err != nil {
 		return nil, err
 	}
+	word.Id = w.ID
 	return word, nil
 }
 

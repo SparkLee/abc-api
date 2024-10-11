@@ -30,7 +30,7 @@ func (s *WordService) CreateWord(ctx context.Context, req *pb.CreateWordRequest)
 		return nil, err
 	}
 	return &pb.CreateWordReply{Word: &pb.Word{
-		Id:   1,
+		Id:   word.Id,
 		Text: word.Text,
 	}}, nil
 }
