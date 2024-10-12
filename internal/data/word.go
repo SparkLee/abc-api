@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/sparklee/abc-api/internal/biz"
+	"github.com/sparklee/abc-api/internal/data/ent"
+	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
 type wordRepo struct {
@@ -32,12 +34,12 @@ func (r *wordRepo) Save(ctx context.Context, word *biz.Word) (*biz.Word, error) 
 }
 
 func (r *wordRepo) List(ctx context.Context, group string) ([]*biz.Word, error) {
-	words, err := r.data.db.Words.Query().All(ctx)
+	rows, err := r.data.db.Words.Query().Order(ent.Desc(words.FieldID)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	result := make([]*biz.Word, 0)
-	for _, word := range words {
+	for _, word := range rows {
 		result = append(result, &biz.Word{
 			Id:    word.ID,
 			Group: word.Group,
