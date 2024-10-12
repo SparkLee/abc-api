@@ -34,7 +34,8 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, wordService 
 	}
 	opts = append(opts, http.Filter(handlers.CORS(
 		handlers.AllowedOrigins([]string{"*"}),
-		handlers.AllowedMethods([]string{"GET", "POST", "DELETE"}),
+		handlers.AllowedHeaders([]string{"Origin", "Accept", "Content-Type", "Authorization"}),
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"}),
 	)))
 	srv := http.NewServer(opts...)
 	v1.RegisterWordServiceHTTPServer(srv, wordService)
