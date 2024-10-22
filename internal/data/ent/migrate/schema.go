@@ -13,7 +13,7 @@ var (
 	WordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "group", Type: field.TypeString, Comment: "分组"},
-		{Name: "word", Type: field.TypeString, Unique: true},
+		{Name: "word", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 	}
