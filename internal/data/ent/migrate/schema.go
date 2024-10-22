@@ -3,6 +3,7 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
@@ -11,14 +12,15 @@ var (
 	// WordsColumns holds the columns for the "words" table.
 	WordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
-		{Name: "group", Type: field.TypeString},
-		{Name: "word", Type: field.TypeString},
+		{Name: "group", Type: field.TypeString, Comment: "分组"},
+		{Name: "word", Type: field.TypeString, Unique: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// WordsTable holds the schema information for the "words" table.
 	WordsTable = &schema.Table{
 		Name:       "words",
+		Comment:    "单词表",
 		Columns:    WordsColumns,
 		PrimaryKey: []*schema.Column{WordsColumns[0]},
 	}
@@ -29,4 +31,5 @@ var (
 )
 
 func init() {
+	WordsTable.Annotation = &entsql.Annotation{}
 }

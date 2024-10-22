@@ -12,12 +12,12 @@ import (
 	"github.com/sparklee/abc-api/internal/data/ent/words"
 )
 
-// Words is the model entity for the Words schema.
+// 单词表
 type Words struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int64 `json:"id,omitempty"`
-	// Group holds the value of the "group" field.
+	// 分组
 	Group string `json:"group,omitempty"`
 	// Word holds the value of the "word" field.
 	Word string `json:"word,omitempty"`
