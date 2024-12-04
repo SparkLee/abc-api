@@ -1301,3 +1301,209 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListWordReplyValidationError{}
+
+// Validate checks the field values on GetAliyunNlsTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetAliyunNlsTokenRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAliyunNlsTokenRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetAliyunNlsTokenRequestMultiError, or nil if none found.
+func (m *GetAliyunNlsTokenRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAliyunNlsTokenRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return GetAliyunNlsTokenRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetAliyunNlsTokenRequestMultiError is an error wrapping multiple validation
+// errors returned by GetAliyunNlsTokenRequest.ValidateAll() if the designated
+// constraints aren't met.
+type GetAliyunNlsTokenRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAliyunNlsTokenRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAliyunNlsTokenRequestMultiError) AllErrors() []error { return m }
+
+// GetAliyunNlsTokenRequestValidationError is the validation error returned by
+// GetAliyunNlsTokenRequest.Validate if the designated constraints aren't met.
+type GetAliyunNlsTokenRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetAliyunNlsTokenRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetAliyunNlsTokenRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetAliyunNlsTokenRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetAliyunNlsTokenRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetAliyunNlsTokenRequestValidationError) ErrorName() string {
+	return "GetAliyunNlsTokenRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetAliyunNlsTokenRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetAliyunNlsTokenRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetAliyunNlsTokenRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetAliyunNlsTokenRequestValidationError{}
+
+// Validate checks the field values on GetAliyunNlsTokenReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetAliyunNlsTokenReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAliyunNlsTokenReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetAliyunNlsTokenReplyMultiError, or nil if none found.
+func (m *GetAliyunNlsTokenReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAliyunNlsTokenReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Token
+
+	if len(errors) > 0 {
+		return GetAliyunNlsTokenReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetAliyunNlsTokenReplyMultiError is an error wrapping multiple validation
+// errors returned by GetAliyunNlsTokenReply.ValidateAll() if the designated
+// constraints aren't met.
+type GetAliyunNlsTokenReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAliyunNlsTokenReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAliyunNlsTokenReplyMultiError) AllErrors() []error { return m }
+
+// GetAliyunNlsTokenReplyValidationError is the validation error returned by
+// GetAliyunNlsTokenReply.Validate if the designated constraints aren't met.
+type GetAliyunNlsTokenReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetAliyunNlsTokenReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetAliyunNlsTokenReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetAliyunNlsTokenReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetAliyunNlsTokenReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetAliyunNlsTokenReplyValidationError) ErrorName() string {
+	return "GetAliyunNlsTokenReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetAliyunNlsTokenReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetAliyunNlsTokenReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetAliyunNlsTokenReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetAliyunNlsTokenReplyValidationError{}

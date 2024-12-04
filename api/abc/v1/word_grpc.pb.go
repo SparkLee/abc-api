@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WordService_CreateWord_FullMethodName = "/api.abc.v1.WordService/CreateWord"
-	WordService_UpdateWord_FullMethodName = "/api.abc.v1.WordService/UpdateWord"
-	WordService_DeleteWord_FullMethodName = "/api.abc.v1.WordService/DeleteWord"
-	WordService_GetWord_FullMethodName    = "/api.abc.v1.WordService/GetWord"
-	WordService_ListWord_FullMethodName   = "/api.abc.v1.WordService/ListWord"
+	WordService_CreateWord_FullMethodName        = "/api.abc.v1.WordService/CreateWord"
+	WordService_UpdateWord_FullMethodName        = "/api.abc.v1.WordService/UpdateWord"
+	WordService_DeleteWord_FullMethodName        = "/api.abc.v1.WordService/DeleteWord"
+	WordService_GetWord_FullMethodName           = "/api.abc.v1.WordService/GetWord"
+	WordService_ListWord_FullMethodName          = "/api.abc.v1.WordService/ListWord"
+	WordService_GetAliyunNlsToken_FullMethodName = "/api.abc.v1.WordService/GetAliyunNlsToken"
 )
 
 // WordServiceClient is the client API for WordService service.
@@ -35,6 +36,7 @@ type WordServiceClient interface {
 	DeleteWord(ctx context.Context, in *DeleteWordRequest, opts ...grpc.CallOption) (*DeleteWordReply, error)
 	GetWord(ctx context.Context, in *GetWordRequest, opts ...grpc.CallOption) (*GetWordReply, error)
 	ListWord(ctx context.Context, in *ListWordRequest, opts ...grpc.CallOption) (*ListWordReply, error)
+	GetAliyunNlsToken(ctx context.Context, in *GetAliyunNlsTokenRequest, opts ...grpc.CallOption) (*GetAliyunNlsTokenReply, error)
 }
 
 type wordServiceClient struct {
@@ -95,6 +97,16 @@ func (c *wordServiceClient) ListWord(ctx context.Context, in *ListWordRequest, o
 	return out, nil
 }
 
+func (c *wordServiceClient) GetAliyunNlsToken(ctx context.Context, in *GetAliyunNlsTokenRequest, opts ...grpc.CallOption) (*GetAliyunNlsTokenReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAliyunNlsTokenReply)
+	err := c.cc.Invoke(ctx, WordService_GetAliyunNlsToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WordServiceServer is the server API for WordService service.
 // All implementations must embed UnimplementedWordServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type WordServiceServer interface {
 	DeleteWord(context.Context, *DeleteWordRequest) (*DeleteWordReply, error)
 	GetWord(context.Context, *GetWordRequest) (*GetWordReply, error)
 	ListWord(context.Context, *ListWordRequest) (*ListWordReply, error)
+	GetAliyunNlsToken(context.Context, *GetAliyunNlsTokenRequest) (*GetAliyunNlsTokenReply, error)
 	mustEmbedUnimplementedWordServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedWordServiceServer) GetWord(context.Context, *GetWordRequest) 
 }
 func (UnimplementedWordServiceServer) ListWord(context.Context, *ListWordRequest) (*ListWordReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListWord not implemented")
+}
+func (UnimplementedWordServiceServer) GetAliyunNlsToken(context.Context, *GetAliyunNlsTokenRequest) (*GetAliyunNlsTokenReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAliyunNlsToken not implemented")
 }
 func (UnimplementedWordServiceServer) mustEmbedUnimplementedWordServiceServer() {}
 func (UnimplementedWordServiceServer) testEmbeddedByValue()                     {}
@@ -240,6 +256,24 @@ func _WordService_ListWord_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WordService_GetAliyunNlsToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAliyunNlsTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WordServiceServer).GetAliyunNlsToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WordService_GetAliyunNlsToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WordServiceServer).GetAliyunNlsToken(ctx, req.(*GetAliyunNlsTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WordService_ServiceDesc is the grpc.ServiceDesc for WordService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +300,10 @@ var WordService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListWord",
 			Handler:    _WordService_ListWord_Handler,
+		},
+		{
+			MethodName: "GetAliyunNlsToken",
+			Handler:    _WordService_GetAliyunNlsToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

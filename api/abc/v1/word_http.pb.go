@@ -21,6 +21,7 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationWordServiceCreateWord = "/api.abc.v1.WordService/CreateWord"
 const OperationWordServiceDeleteWord = "/api.abc.v1.WordService/DeleteWord"
+const OperationWordServiceGetAliyunNlsToken = "/api.abc.v1.WordService/GetAliyunNlsToken"
 const OperationWordServiceGetWord = "/api.abc.v1.WordService/GetWord"
 const OperationWordServiceListWord = "/api.abc.v1.WordService/ListWord"
 const OperationWordServiceUpdateWord = "/api.abc.v1.WordService/UpdateWord"
@@ -28,6 +29,7 @@ const OperationWordServiceUpdateWord = "/api.abc.v1.WordService/UpdateWord"
 type WordServiceHTTPServer interface {
 	CreateWord(context.Context, *CreateWordRequest) (*CreateWordReply, error)
 	DeleteWord(context.Context, *DeleteWordRequest) (*DeleteWordReply, error)
+	GetAliyunNlsToken(context.Context, *GetAliyunNlsTokenRequest) (*GetAliyunNlsTokenReply, error)
 	GetWord(context.Context, *GetWordRequest) (*GetWordReply, error)
 	ListWord(context.Context, *ListWordRequest) (*ListWordReply, error)
 	UpdateWord(context.Context, *UpdateWordRequest) (*UpdateWordReply, error)
@@ -40,6 +42,7 @@ func RegisterWordServiceHTTPServer(s *http.Server, srv WordServiceHTTPServer) {
 	r.DELETE("/v1/words/{id}", _WordService_DeleteWord0_HTTP_Handler(srv))
 	r.GET("/v1/words/{id}", _WordService_GetWord0_HTTP_Handler(srv))
 	r.GET("/v1/words", _WordService_ListWord0_HTTP_Handler(srv))
+	r.GET("/v1/aliyun/nls/token", _WordService_GetAliyunNlsToken0_HTTP_Handler(srv))
 }
 
 func _WordService_CreateWord0_HTTP_Handler(srv WordServiceHTTPServer) func(ctx http.Context) error {
@@ -152,9 +155,29 @@ func _WordService_ListWord0_HTTP_Handler(srv WordServiceHTTPServer) func(ctx htt
 	}
 }
 
+func _WordService_GetAliyunNlsToken0_HTTP_Handler(srv WordServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetAliyunNlsTokenRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationWordServiceGetAliyunNlsToken)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetAliyunNlsToken(ctx, req.(*GetAliyunNlsTokenRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetAliyunNlsTokenReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type WordServiceHTTPClient interface {
 	CreateWord(ctx context.Context, req *CreateWordRequest, opts ...http.CallOption) (rsp *CreateWordReply, err error)
 	DeleteWord(ctx context.Context, req *DeleteWordRequest, opts ...http.CallOption) (rsp *DeleteWordReply, err error)
+	GetAliyunNlsToken(ctx context.Context, req *GetAliyunNlsTokenRequest, opts ...http.CallOption) (rsp *GetAliyunNlsTokenReply, err error)
 	GetWord(ctx context.Context, req *GetWordRequest, opts ...http.CallOption) (rsp *GetWordReply, err error)
 	ListWord(ctx context.Context, req *ListWordRequest, opts ...http.CallOption) (rsp *ListWordReply, err error)
 	UpdateWord(ctx context.Context, req *UpdateWordRequest, opts ...http.CallOption) (rsp *UpdateWordReply, err error)
@@ -188,6 +211,19 @@ func (c *WordServiceHTTPClientImpl) DeleteWord(ctx context.Context, in *DeleteWo
 	opts = append(opts, http.Operation(OperationWordServiceDeleteWord))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *WordServiceHTTPClientImpl) GetAliyunNlsToken(ctx context.Context, in *GetAliyunNlsTokenRequest, opts ...http.CallOption) (*GetAliyunNlsTokenReply, error) {
+	var out GetAliyunNlsTokenReply
+	pattern := "/v1/aliyun/nls/token"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationWordServiceGetAliyunNlsToken))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

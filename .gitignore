@@ -1,5 +1,7 @@
 # Reference https://github.com/github/gitignore/blob/master/Go.gitignore
 
+configs/config-local.yaml
+
 # Sqlite
 sqlite/
 

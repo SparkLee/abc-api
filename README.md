@@ -1,5 +1,12 @@
 # Kratos Project Template
 
+## 使用
+```
+make all
+go build -o ./bin/ ./...
+./bin/abc.exe -conf ./configs/config-local.yaml
+```
+
 ## Install Kratos
 ```
 go install github.com/go-kratos/kratos/cmd/kratos/v2@latest

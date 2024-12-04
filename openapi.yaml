@@ -25,6 +25,18 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /v1/aliyun/nls/token:
+        get:
+            tags:
+                - WordService
+            operationId: WordService_GetAliyunNlsToken
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.abc.v1.GetAliyunNlsTokenReply'
     /v1/words:
         get:
             tags:
@@ -132,6 +144,11 @@ components:
         api.abc.v1.DeleteWordReply:
             type: object
             properties: {}
+        api.abc.v1.GetAliyunNlsTokenReply:
+            type: object
+            properties:
+                token:
+                    type: string
         api.abc.v1.GetWordReply:
             type: object
             properties:

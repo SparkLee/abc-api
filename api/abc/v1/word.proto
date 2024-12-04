@@ -35,6 +35,11 @@ service WordService {
       get: "/v1/words"
     };
   };
+  rpc GetAliyunNlsToken (GetAliyunNlsTokenRequest) returns (GetAliyunNlsTokenReply){
+    option(google.api.http) = {
+      get: "/v1/aliyun/nls/token"
+    };
+  };
 }
 
 message Word {
@@ -74,4 +79,10 @@ message ListWordRequest {
 }
 message ListWordReply {
   repeated Word words = 1;
+}
+
+message GetAliyunNlsTokenRequest {
+}
+message GetAliyunNlsTokenReply {
+  string token = 1;
 }

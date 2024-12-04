@@ -2,16 +2,30 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/sparklee/abc-api/internal/biz"
-
 	pb "github.com/sparklee/abc-api/api/abc/v1"
+	"github.com/sparklee/abc-api/internal/biz"
 )
+
+var AliyunClient *sdk.Client
 
 type WordService struct {
 	pb.UnimplementedWordServiceServer
 	log *log.Helper
 	uc  *biz.WordUsecase
+}
+
+type TokenResult struct {
+	ErrMsg string
+	Token  struct {
+		UserId     string
+		Id         string
+		ExpireTime int64
+	}
 }
 
 func NewWordService(uc *biz.WordUsecase, logger log.Logger) *WordService {
@@ -62,4 +76,30 @@ func (s *WordService) ListWord(ctx context.Context, req *pb.ListWordRequest) (*p
 	return &pb.ListWordReply{
 		Words: result,
 	}, nil
+}
+
+func (s *WordService) GetAliyunNlsToken(ctx context.Context, req *pb.GetAliyunNlsTokenRequest) (*pb.GetAliyunNlsTokenReply, error) {
+	client := AliyunClient
+	request := requests.NewCommonRequest()
+	request.Method = "POST"
+	request.Domain = "nls-meta.cn-shanghai.aliyuncs.com"
+	request.ApiName = "CreateToken"
+	request.Version = "2019-02-28"
+	response, err := client.ProcessCommonRequest(request)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Print(response.GetHttpStatus())
+	fmt.Print(response.GetHttpContentString())
+
+	var tr TokenResult
+	err = json.Unmarshal([]byte(response.GetHttpContentString()), &tr)
+	if err == nil {
+		fmt.Println(tr.Token.Id)
+		fmt.Println(tr.Token.ExpireTime)
+	} else {
+		fmt.Println(err)
+	}
+
+	return &pb.GetAliyunNlsTokenReply{Token: tr.Token.Id}, nil
 }

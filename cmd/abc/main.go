@@ -2,6 +2,9 @@ package main
 
 import (
 	"flag"
+	aliyunSdk "github.com/aliyun/alibaba-cloud-sdk-go/sdk"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials"
+	"github.com/sparklee/abc-api/internal/service"
 	"os"
 
 	"github.com/sparklee/abc-api/internal/conf"
@@ -79,6 +82,12 @@ func main() {
 		panic(err)
 	}
 	defer cleanup()
+
+	options, err := aliyunSdk.NewClientWithOptions("cn-shanghai", aliyunSdk.NewConfig(), credentials.NewAccessKeyCredential(bc.Aliyun.GetAccessKeyId(), bc.Aliyun.GetAccessKeySecret()))
+	if err != nil {
+		return
+	}
+	service.AliyunClient = options
 
 	// start and wait for stop signal
 	if err := app.Run(); err != nil {
