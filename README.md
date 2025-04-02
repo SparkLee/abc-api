@@ -3,7 +3,7 @@
 ## 使用
 ```
 make all
-go build -o ./bin/ ./...
+make build
 ./bin/abc.exe -conf ./configs/config-local.yaml
 ```
 
